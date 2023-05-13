@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'com.example'
+group 'blahaj-finder'
 version '1.0'
 
 repositories {
