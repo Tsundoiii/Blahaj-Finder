@@ -22,6 +22,10 @@ public class Main {
         return request.execute();
     }
 
+    public static double distance(double[] c, double[] d) {
+        return Math.hypot(d[0] - c[0], d[1] - c[1]);
+    }
+
     public static void main(String[] args) {
         try {
             Type type = new TypeToken<List<Store>>() {
@@ -32,7 +36,7 @@ public class Main {
                     "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
                     new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
                     .parseAs(Availabilities.class);
-                    System.out.println(availabilities.getData().get(0).getAvailableStocks().get(0).getProbabilities().get(0).getCommunication().getMessageType());
+                    System.out.println(distance(new double[] {-3, -1}, new double[] {-7, -1}));
         } catch (Exception e) {
             e.printStackTrace();
         }
