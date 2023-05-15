@@ -32,7 +32,7 @@ public class Main {
                     "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
                     new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
                     .parseAs(Availabilities.class);
-                    System.out.println(availabilities.getData().get(0).getAvailableStocks().get(0).getProbabilities().get(0).getCommuncation().getMessageType());
+                    System.out.println(availabilities.getData().get(0).getAvailableStocks().get(0).getProbabilities().get(0).getCommunication().getMessageType());
         } catch (Exception e) {
             e.printStackTrace();
         }

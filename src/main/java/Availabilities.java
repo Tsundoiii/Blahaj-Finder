@@ -16,10 +16,10 @@ public class Availabilities {
                 }
 
                 @Key
-                private Communication communcation;
+                private Communication communication;
 
-                public Communication getCommuncation() {
-                    return communcation;
+                public Communication getCommunication() {
+                    return communication;
                 }
             }
 
