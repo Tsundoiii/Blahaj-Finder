@@ -59,7 +59,6 @@ public class Store {
     private BuClassification buClassification;
     @Key
     private String placeId;
-    private double[] coordinates = { Double.parseDouble(lat), Double.parseDouble(lng) };
 
     public String getId() {
         return id;
@@ -94,6 +93,6 @@ public class Store {
     }
 
     public double[] getCoordinates() {
-        return coordinates;
+        return new double[] { Double.parseDouble(lat), Double.parseDouble(lng) };
     }
 }
