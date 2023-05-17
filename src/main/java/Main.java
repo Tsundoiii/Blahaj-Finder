@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -37,6 +38,16 @@ public class Main {
         return R * c;
     }
 
+    public static Optional<Integer> quantity(Availabilities availabilities, Store store) {
+        Optional<Integer> result = Optional.empty();
+        for (Availabilities.AvailabilityInfo availabilityInfo : availabilities.getData()) {
+            if (availabilityInfo.getClassUnitKey().getClassUnitCode().equals(store.getBuClassification().getCode())) {
+                result = Optional.of(availabilityInfo.getAvailableStocks().get(0).getQuantity());
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) throws IOException {
         @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
         List<Store> stores = (List<Store>) request(
@@ -56,6 +67,6 @@ public class Main {
                 distToStores.put(distance(cd, store.getCoordinates()), store);
             }
         }
-        System.out.println(distToStores.values().stream().findFirst().get());
+        System.out.println(quantity(availabilities, distToStores.values().stream().findFirst().get()).get());
     }
 }
