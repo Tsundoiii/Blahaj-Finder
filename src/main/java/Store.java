@@ -95,4 +95,8 @@ public class Store {
     public double[] getCoordinates() {
         return new double[] { Double.parseDouble(lat), Double.parseDouble(lng) };
     }
+
+    public String toString() {
+        return name + "\n" + address;
+    }
 }

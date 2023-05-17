@@ -56,6 +56,6 @@ public class Main {
                 distToStores.put(distance(cd, store.getCoordinates()), store);
             }
         }
-        System.out.println(distToStores.values().stream().findFirst().get().getAddress());
+        System.out.println(distToStores.values().stream().findFirst().get());
     }
 }
