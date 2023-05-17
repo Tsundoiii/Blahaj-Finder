@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -31,12 +33,12 @@ public class Main {
         final double a = Math.pow(Math.sin(deltaLatitude / 2), 2)
                 + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLongitude / 2), 2);
         final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        
+
         return R * c;
     }
 
     public static void main(String[] args) throws IOException {
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
         List<Store> stores = (List<Store>) request(
                 "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json")
                 .parseAs(new TypeToken<List<Store>>() {
@@ -46,6 +48,14 @@ public class Main {
                 new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
                 .parseAs(Availabilities.class);
 
-        System.out.println(distance(stores.get(0).getCoordinates(), stores.get(1).getCoordinates()));
+        SortedMap<Double, Store> distToStores = new TreeMap<Double, Store>();
+        double[] cd = { 34.13769217402672, -118.05555567055725 };
+        for (Store store : stores) {
+            if (store.getBuClassification().getCode().equals("STORE")) { // only include stores and not other locations
+                                                                         // like Plan and Order Points
+                distToStores.put(distance(cd, store.getCoordinates()), store);
+            }
+        }
+        System.out.println(distToStores.values().stream().findFirst().get().getAddress());
     }
 }
