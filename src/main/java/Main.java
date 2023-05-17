@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import com.google.api.client.http.GenericUrl;
@@ -22,23 +21,31 @@ public class Main {
         return request.execute();
     }
 
-    public static double distance(double[] c, double[] d) {
-        return Math.hypot(d[0] - c[0], d[1] - c[1]);
+    public static double distance(double[] c1, double[] c2) {
+        final int R = 6371;
+        final double lat1 = Math.toRadians(c1[0]);
+        final double lat2 = Math.toRadians(c2[0]);
+        final double deltaLatitude = Math.toRadians(c2[0] - c1[0]);
+        final double deltaLongitude = Math.toRadians(c2[1] - c1[1]);
+
+        final double a = Math.pow(Math.sin(deltaLatitude / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLongitude / 2), 2);
+        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        
+        return R * c;
     }
 
-    public static void main(String[] args) {
-        try {
-            Type type = new TypeToken<List<Store>>() {
-            }.getType();
-            List<Store> stores = (List<Store>) request(
-                    "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json").parseAs(type);
-            Availabilities availabilities = request(
-                    "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
-                    new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
-                    .parseAs(Availabilities.class);
-                    System.out.println(stores.get(0).getCoordinates()[0]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException {
+        @SuppressWarnings("unchecked")
+        List<Store> stores = (List<Store>) request(
+                "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json")
+                .parseAs(new TypeToken<List<Store>>() {
+                }.getType());
+        Availabilities availabilities = request(
+                "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
+                new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
+                .parseAs(Availabilities.class);
+
+        System.out.println(distance(stores.get(0).getCoordinates(), stores.get(1).getCoordinates()));
     }
 }
