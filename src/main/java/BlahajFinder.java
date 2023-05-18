@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -58,10 +59,12 @@ public class BlahajFinder implements Runnable {
             ioe.printStackTrace();
         }
 
+
+        System.out.println(Color.BLUE + "BLÅHAJ FINDER" + Color.RESET);
+
         for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toSet())) {
             Store store = distToStores.get(entry);
-            System.out.println(store);
-            System.out.println(availabilities.get(store.getId()));
+            store.printInfo(availabilities.get(store.getId()));
             System.out.println();
         }
     }

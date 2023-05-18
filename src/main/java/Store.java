@@ -1,5 +1,6 @@
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.Map;
 
 import com.google.api.client.util.Key;
 
@@ -20,10 +21,35 @@ public class Store {
     }
 
     public static class Hours {
-        @Key
-        private List<Map<String, String>> normal;
+        public static class OperatingHours {
+            @Key
+            private String day;
+            @Key
+            private String open;
+            @Key
+            private String close;
 
-        public List<Map<String, String>> getNormal() {
+            public String getDay() {
+                return day;
+            }
+
+            public String getOpen() {
+                return open;
+            }
+
+            public String getClose() {
+                return close;
+            }
+
+            public String toString() {
+                return day + ": " + open + "-" + close;
+            }
+        }
+
+        @Key
+        private List<OperatingHours> normal;
+
+        public List<OperatingHours> getNormal() {
             return normal;
         }
     }
@@ -65,7 +91,7 @@ public class Store {
     }
 
     public String getName() {
-        return name;
+        return Color.YELLOW.getColorCode() + name + Color.RESET.getColorCode();
     }
 
     public String getLat() {
@@ -111,9 +137,13 @@ public class Store {
         return R * c;
     }
 
-    public String toString() {
-        final String YELLOW = "\u001B[33m";
-        final String RESET = "\u001B[0m";
-        return YELLOW + name + RESET + "\n" + address;
+    public void printInfo(int quantity) {
+        int currentHour = LocalDateTime.now().get(ChronoField.HOUR_OF_DAY);
+        boolean open = Integer.parseInt() <= currentHour < ;
+        System.out.println(currentHour);
+        System.out.println(Color.YELLOW.getColorCode() + name + Color.RESET.getColorCode());
+        System.out.println(address);
+        System.out.println();
+        hours.normal.forEach(operatingHours -> System.out.println(operatingHours));
     }
 }
