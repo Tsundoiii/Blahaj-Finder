@@ -1,8 +1,10 @@
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
@@ -41,32 +43,36 @@ public class Main {
     public static Optional<Integer> quantity(Availabilities availabilities, Store store) {
         Optional<Integer> result = Optional.empty();
         for (Availabilities.AvailabilityInfo availabilityInfo : availabilities.getData()) {
-            if (availabilityInfo.getClassUnitKey().getClassUnitCode().equals(store.getBuClassification().getCode())) {
+            if (availabilityInfo.getClassUnitKey().getClassUnitCode().equals(store.getId())) {
                 result = Optional.of(availabilityInfo.getAvailableStocks().get(0).getQuantity());
+                break;
             }
         }
         return result;
     }
 
     public static void main(String[] args) throws IOException {
+        double[] cd = { 34.13769217402672, -118.05555567055725 };
+        HashMap<String, Integer> availabilities = new HashMap<String, Integer>();
+        SortedMap<Double, Store> distToStores = new TreeMap<Double, Store>();
+
         @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
-        List<Store> stores = (List<Store>) request(
+        List<Store> stores = ((List<Store>) request(
                 "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json")
                 .parseAs(new TypeToken<List<Store>>() {
-                }.getType());
-        Availabilities availabilities = request(
+                }.getType())).stream().filter(store -> store.getBuClassification().getCode().equals("STORE"))
+                .collect(Collectors.toList());
+        stores.forEach(store -> {
+            distToStores.put(distance(cd, store.getCoordinates()), store);
+        });
+        request(
                 "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
                 new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
-                .parseAs(Availabilities.class);
+                .parseAs(Availabilities.class).getData().stream()
+                .filter(availabilityInfo -> availabilityInfo.getAvailableStocks() != null)
+                .forEach(availabilityInfo -> availabilities.put(availabilityInfo.getClassUnitKey().getClassUnitCode(),
+                        availabilityInfo.getAvailableStocks().get(0).getQuantity()));
 
-        SortedMap<Double, Store> distToStores = new TreeMap<Double, Store>();
-        double[] cd = { 34.13769217402672, -118.05555567055725 };
-        for (Store store : stores) {
-            if (store.getBuClassification().getCode().equals("STORE")) { // only include stores and not other locations
-                                                                         // like Plan and Order Points
-                distToStores.put(distance(cd, store.getCoordinates()), store);
-            }
-        }
-        System.out.println(quantity(availabilities, distToStores.values().stream().findFirst().get()).get());
+        System.out.println(availabilities.get(distToStores.values().stream().findFirst().get().getId()));
     }
 }
