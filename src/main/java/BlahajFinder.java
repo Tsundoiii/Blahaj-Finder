@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -20,6 +19,8 @@ import picocli.CommandLine.Option;
 public class BlahajFinder implements Runnable {
     @Option(names = { "-c", "--coordinates" }, description = "coordinates", split = ",")
     private double[] coordinates;
+    @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
+    private int numberOfStores = 1;
 
     public static HttpResponse request(String url, String[]... headers) throws IOException {
         HttpRequest request = new NetHttpTransport().createRequestFactory((HttpRequest hr) -> {
@@ -32,38 +33,11 @@ public class BlahajFinder implements Runnable {
         return request.execute();
     }
 
-    public static double distance(double[] c1, double[] c2) {
-        final int R = 6371;
-        final double lat1 = Math.toRadians(c1[0]);
-        final double lat2 = Math.toRadians(c2[0]);
-        final double deltaLatitude = Math.toRadians(c2[0] - c1[0]);
-        final double deltaLongitude = Math.toRadians(c2[1] - c1[1]);
-
-        final double a = Math.pow(Math.sin(deltaLatitude / 2), 2)
-                + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLongitude / 2), 2);
-        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return R * c;
-    }
-
-    public static Optional<Integer> quantity(Availabilities availabilities, Store store) {
-        Optional<Integer> result = Optional.empty();
-        for (Availabilities.AvailabilityInfo availabilityInfo : availabilities.getData()) {
-            if (availabilityInfo.getClassUnitKey().getClassUnitCode().equals(store.getId())) {
-                result = Optional.of(availabilityInfo.getAvailableStocks().get(0).getQuantity());
-                break;
-            }
-        }
-        return result;
-    }
-
     @Override
     public void run() {
-        System.out.println(coordinates[0]);
-
         HashMap<String, Integer> availabilities = new HashMap<String, Integer>();
         SortedMap<Double, Store> distToStores = new TreeMap<Double, Store>();
-        
+
         try {
             @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
             List<Store> stores = ((List<Store>) request(
@@ -71,9 +45,7 @@ public class BlahajFinder implements Runnable {
                     .parseAs(new TypeToken<List<Store>>() {
                     }.getType())).stream().filter(store -> store.getBuClassification().getCode().equals("STORE"))
                     .collect(Collectors.toList());
-            stores.forEach(store -> {
-                distToStores.put(distance(coordinates, store.getCoordinates()), store);
-            });
+            stores.forEach(store -> distToStores.put(store.distance(coordinates), store));
             request(
                     "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
                     new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
@@ -86,7 +58,12 @@ public class BlahajFinder implements Runnable {
             ioe.printStackTrace();
         }
 
-        System.out.println(availabilities.get(distToStores.values().stream().findFirst().get().getId()));
+        for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toSet())) {
+            Store store = distToStores.get(entry);
+            System.out.println(store);
+            System.out.println(availabilities.get(store.getId()));
+            System.out.println();
+        }
     }
 
     public static void main(String[] args) {

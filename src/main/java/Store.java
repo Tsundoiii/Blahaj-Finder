@@ -96,7 +96,24 @@ public class Store {
         return new double[] { Double.parseDouble(lat), Double.parseDouble(lng) };
     }
 
+    public double distance(double[] coordinates) {
+        final double[] storeCoordinates = getCoordinates();
+        final int R = 6371;
+        final double lat1 = Math.toRadians(storeCoordinates[0]);
+        final double lat2 = Math.toRadians(coordinates[0]);
+        final double deltaLatitude = Math.toRadians(coordinates[0] - storeCoordinates[0]);
+        final double deltaLongitude = Math.toRadians(coordinates[1] - storeCoordinates[1]);
+
+        final double a = Math.pow(Math.sin(deltaLatitude / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(deltaLongitude / 2), 2);
+        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c;
+    }
+
     public String toString() {
-        return name + "\n" + address;
+        final String YELLOW = "\u001B[33m";
+        final String RESET = "\u001B[0m";
+        return YELLOW + name + RESET + "\n" + address;
     }
 }
