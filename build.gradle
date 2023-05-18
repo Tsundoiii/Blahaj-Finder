@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation 'com.google.http-client:google-http-client:1.43.2'
     implementation 'com.google.http-client:google-http-client-gson:1.43.2'
+    implementation 'info.picocli:picocli:4.7.3'
 }
 
 sourceSets {

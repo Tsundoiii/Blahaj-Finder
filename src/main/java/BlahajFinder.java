@@ -14,7 +14,13 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.reflect.TypeToken;
 
-public class Main {
+import picocli.CommandLine;
+import picocli.CommandLine.Option;
+
+public class BlahajFinder implements Runnable {
+    @Option(names = { "-c", "--coordinates" }, description = "coordinates", split = ",")
+    private double[] coordinates;
+
     public static HttpResponse request(String url, String[]... headers) throws IOException {
         HttpRequest request = new NetHttpTransport().createRequestFactory((HttpRequest hr) -> {
             hr.setParser(new JsonObjectParser(new GsonFactory()));
@@ -51,28 +57,40 @@ public class Main {
         return result;
     }
 
-    public static void main(String[] args) throws IOException {
-        double[] cd = { 34.13769217402672, -118.05555567055725 };
+    @Override
+    public void run() {
+        System.out.println(coordinates[0]);
+
         HashMap<String, Integer> availabilities = new HashMap<String, Integer>();
         SortedMap<Double, Store> distToStores = new TreeMap<Double, Store>();
-
-        @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
-        List<Store> stores = ((List<Store>) request(
-                "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json")
-                .parseAs(new TypeToken<List<Store>>() {
-                }.getType())).stream().filter(store -> store.getBuClassification().getCode().equals("STORE"))
-                .collect(Collectors.toList());
-        stores.forEach(store -> {
-            distToStores.put(distance(cd, store.getCoordinates()), store);
-        });
-        request(
-                "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
-                new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
-                .parseAs(Availabilities.class).getData().stream()
-                .filter(availabilityInfo -> availabilityInfo.getAvailableStocks() != null)
-                .forEach(availabilityInfo -> availabilities.put(availabilityInfo.getClassUnitKey().getClassUnitCode(),
-                        availabilityInfo.getAvailableStocks().get(0).getQuantity()));
+        
+        try {
+            @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
+            List<Store> stores = ((List<Store>) request(
+                    "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json")
+                    .parseAs(new TypeToken<List<Store>>() {
+                    }.getType())).stream().filter(store -> store.getBuClassification().getCode().equals("STORE"))
+                    .collect(Collectors.toList());
+            stores.forEach(store -> {
+                distToStores.put(distance(coordinates, store.getCoordinates()), store);
+            });
+            request(
+                    "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
+                    new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
+                    .parseAs(Availabilities.class).getData().stream()
+                    .filter(availabilityInfo -> availabilityInfo.getAvailableStocks() != null)
+                    .forEach(availabilityInfo -> availabilities.put(
+                            availabilityInfo.getClassUnitKey().getClassUnitCode(),
+                            availabilityInfo.getAvailableStocks().get(0).getQuantity()));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 
         System.out.println(availabilities.get(distToStores.values().stream().findFirst().get().getId()));
+    }
+
+    public static void main(String[] args) {
+        int exitCode = new CommandLine(new BlahajFinder()).execute(args);
+        System.exit(exitCode);
     }
 }
