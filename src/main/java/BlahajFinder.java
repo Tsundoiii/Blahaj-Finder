@@ -21,8 +21,10 @@ public class BlahajFinder implements Runnable {
     private double[] coordinates;
     @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
     private int numberOfStores = 1;
-    @Option(names = {"-v", "--verbose"}, description = "verbose output")
-    private boolean verbose = false;
+    @Option(names = {"-a", "--address"}, description = "show address")
+    private boolean address;
+    @Option(names = {"-o", "--opening-hours"}, description = "show opening hours")
+    private boolean openingHours = false;
 
     public static HttpResponse request(String url, String[]... headers) throws IOException {
         HttpRequest request = new NetHttpTransport().createRequestFactory((HttpRequest hr) -> {
@@ -64,7 +66,7 @@ public class BlahajFinder implements Runnable {
 
         for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toList())) {
             Store store = distToStores.get(entry);
-            store.printInfo(availabilities.get(store.getId()), verbose);
+            store.printInfo(availabilities.get(store.getId()), address, openingHours);
             System.out.println();
         }
     }

@@ -146,16 +146,14 @@ public class Store {
         return R * c;
     }
 
-    public void printInfo(int quantity, boolean verbose) {
-        if (verbose) {
-            System.out.println(getName());
+    public void printInfo(int quantity, boolean showAddress, boolean showOperatingHours) {
+        System.out.println((quantity > 0 ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + quantity
+                + Color.RESET.getColorCode() + " blåhaj(s) are available at " + getName());
+        if (showAddress) {
             System.out.println(address);
             System.out.println();
         }
-        System.out.println((quantity > 0 ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + quantity
-                + Color.RESET.getColorCode() + " blåhaj(s) are available at " + getName());
-        if (verbose) {
-            System.out.println();
+        if (showOperatingHours) {
             System.out.println("Store hours:");
             hours.normal.forEach(operatingHours -> {
                 ZonedDateTime now;
