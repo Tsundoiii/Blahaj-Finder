@@ -1,11 +1,16 @@
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
+import java.time.DayOfWeek;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.api.client.util.Key;
 
 public class Store {
     public static class Address {
+        @Key
+        private String timezone;
         @Key
         private String street;
         @Key
@@ -14,6 +19,10 @@ public class Store {
         private String stateProvinceCode;
         @Key
         private String zipCode;
+
+        public String getTimezone() {
+            return timezone;
+        }
 
         public String toString() {
             return street + "\n" + city + ", " + stateProvinceCode.substring(2) + " " + zipCode;
@@ -138,12 +147,47 @@ public class Store {
     }
 
     public void printInfo(int quantity) {
-        int currentHour = LocalDateTime.now().get(ChronoField.HOUR_OF_DAY);
-        boolean open = Integer.parseInt() <= currentHour < ;
-        System.out.println(currentHour);
-        System.out.println(Color.YELLOW.getColorCode() + name + Color.RESET.getColorCode());
+        System.out.println(getName());
         System.out.println(address);
         System.out.println();
-        hours.normal.forEach(operatingHours -> System.out.println(operatingHours));
+        System.out.println((quantity > 0 ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + quantity
+                + Color.RESET.getColorCode() + " blåhaj(s) are available at " + getName());
+        System.out.println();
+        System.out.println("Store hours:");
+        hours.normal.forEach(operatingHours -> {
+            ZonedDateTime now;
+            /*
+             * Check if the store is the IKEA in Jacksonville, FL and if it is set the time
+             * zone manually
+             * 
+             * I have do to this because for some reason the API doesn't return timezone
+             * information for that particular store even though LITERALLY EVERY OTHER STORE
+             * has timezone info
+             * 
+             * I feel like I should report this as a bug but even if I did want to I have no
+             * idea where to even report this to
+             * 
+             * I guess Jacksonville is just above earthly things such as time zones
+             */
+            if (id.equals("537")) {
+                now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("America/New_York"));
+            } else {
+                now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of(address.getTimezone()));
+            }
+            int currentHour = now.getHour();
+            DayOfWeek currentDay = now.getDayOfWeek();
+            boolean open = Integer
+                    .parseInt(hours.getNormal().get(currentDay.getValue() - 1).getOpen().substring(0, 2)) <= currentHour
+                    && currentHour < Integer
+                            .parseInt(hours.getNormal().get(currentDay.getValue() - 1).getClose().substring(0, 2));
+
+            System.out.println(
+                    (currentDay.getDisplayName(TextStyle.SHORT, Locale.getDefault()).equalsIgnoreCase(
+                            operatingHours.getDay())
+                                    ? (open ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + "* "
+                                            + Color.RESET.getColorCode()
+                                    : "  ")
+                            + operatingHours);
+        });
     }
 }
