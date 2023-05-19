@@ -21,9 +21,9 @@ public class BlahajFinder implements Runnable {
     private double[] coordinates;
     @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
     private int numberOfStores = 1;
-    @Option(names = {"-a", "--address"}, description = "show address")
+    @Option(names = { "-a", "--address" }, description = "show address")
     private boolean address;
-    @Option(names = {"-s", "--store-hours"}, description = "show store hours")
+    @Option(names = { "-s", "--store-hours" }, description = "show store hours")
     private boolean storeHours = false;
 
     public static HttpResponse request(String url, String[]... headers) throws IOException {
