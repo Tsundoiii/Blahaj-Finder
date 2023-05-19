@@ -22,7 +22,7 @@ public class BlahajFinder implements Runnable {
     @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
     private int numberOfStores = 1;
     @Option(names = { "-a", "--address" }, description = "show address")
-    private boolean address;
+    private boolean address = false;
     @Option(names = { "-s", "--store-hours" }, description = "show store hours")
     private boolean storeHours = false;
 
