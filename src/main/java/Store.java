@@ -149,14 +149,15 @@ public class Store {
     public void printInfo(int quantity, boolean showAddress, boolean showStoreHours) {
         System.out.println((quantity > 0 ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + quantity
                 + Color.RESET.getColorCode() + " blåhaj(s) are available at " + getName());
+        System.out.println();
         if (showAddress) {
+            System.out.println("Address:");
             System.out.println(address);
             System.out.println();
         }
         if (showStoreHours) {
             System.out.println("Store hours:");
             hours.normal.forEach(operatingHours -> {
-                ZonedDateTime now;
                 /*
                  * Check if the store is the IKEA in Jacksonville, FL and if it is set the time
                  * zone manually
@@ -170,11 +171,9 @@ public class Store {
                  * 
                  * I guess Jacksonville is just above earthly things such as time zones
                  */
-                if (id.equals("537")) {
-                    now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("America/New_York"));
-                } else {
-                    now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of(address.getTimezone()));
-                }
+                ZonedDateTime now = id.equals("537")
+                        ? ZonedDateTime.now().withZoneSameInstant(ZoneId.of("America/New_York"))
+                        : ZonedDateTime.now().withZoneSameInstant(ZoneId.of(address.getTimezone()));
                 int currentHour = now.getHour();
                 DayOfWeek currentDay = now.getDayOfWeek();
                 boolean open = Integer

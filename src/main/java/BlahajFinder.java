@@ -63,7 +63,7 @@ public class BlahajFinder implements Runnable {
         }
 
         System.out.println(Color.CYAN.getColorCode() + "BLÅHAJ FINDER" + Color.RESET.getColorCode());
-
+        System.out.println();
         for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toList())) {
             Store store = distToStores.get(entry);
             store.printInfo(availabilities.get(store.getId()), address, storeHours);
