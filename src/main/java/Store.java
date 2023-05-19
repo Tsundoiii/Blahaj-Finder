@@ -146,14 +146,14 @@ public class Store {
         return R * c;
     }
 
-    public void printInfo(int quantity, boolean showAddress, boolean showOperatingHours) {
+    public void printInfo(int quantity, boolean showAddress, boolean showStoreHours) {
         System.out.println((quantity > 0 ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + quantity
                 + Color.RESET.getColorCode() + " blåhaj(s) are available at " + getName());
         if (showAddress) {
             System.out.println(address);
             System.out.println();
         }
-        if (showOperatingHours) {
+        if (showStoreHours) {
             System.out.println("Store hours:");
             hours.normal.forEach(operatingHours -> {
                 ZonedDateTime now;
