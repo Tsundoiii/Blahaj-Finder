@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.SortedMap;
@@ -18,18 +19,20 @@ import picocli.CommandLine.Option;
 
 public class BlahajFinder implements Runnable {
     @Option(names = { "-c", "--coordinates" }, description = "coordinates", split = ",")
-    private double[] coordinates;
+    private double[] coordinates = { 0, 0 };
+    @Option(names = { "-s", "--state" }, description = "state to search in", split = ",")
+    private ArrayList<String> states;
     @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
     private int numberOfStores = 1;
     @Option(names = { "-a", "--address" }, description = "show address")
     private boolean address = false;
-    @Option(names = { "-s", "--store-hours" }, description = "show store hours")
+    @Option(names = { "-h", "--hours" }, description = "show store hours")
     private boolean storeHours = false;
 
     public static HttpResponse request(String url, String[]... headers) throws IOException {
-        HttpRequest request = new NetHttpTransport().createRequestFactory((HttpRequest hr) -> {
-            hr.setParser(new JsonObjectParser(new GsonFactory()));
-        }).buildGetRequest(new GenericUrl(url));
+        HttpRequest request = new NetHttpTransport()
+                .createRequestFactory(hr -> hr.setParser(new JsonObjectParser(new GsonFactory())))
+                .buildGetRequest(new GenericUrl(url));
         for (String[] header : headers) {
             request.getHeaders().set(header[0], header[1]);
         }
@@ -47,7 +50,11 @@ public class BlahajFinder implements Runnable {
             List<Store> stores = ((List<Store>) request(
                     "https://www.ikea.com/us/en/meta-data/navigation/stores-detailed.json")
                     .parseAs(new TypeToken<List<Store>>() {
-                    }.getType())).stream().filter(store -> store.getBuClassification().getCode().equals("STORE"))
+                    }.getType())).stream()
+                    .filter(store -> store.getBuClassification().getCode().equals("STORE") && (states != null
+                            ? states.stream()
+                                    .anyMatch(state -> ("US" + state).equals(store.getAddress().getStateProvinceCode()))
+                            : true))
                     .collect(Collectors.toList());
             stores.forEach(store -> distToStores.put(store.distance(coordinates), store));
             request(
@@ -72,7 +79,6 @@ public class BlahajFinder implements Runnable {
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new BlahajFinder()).execute(args);
-        System.exit(exitCode);
+        System.exit(new CommandLine(new BlahajFinder()).execute(args));
     }
 }

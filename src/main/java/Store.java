@@ -24,6 +24,11 @@ public class Store {
             return timezone;
         }
 
+        public String getStateProvinceCode() {
+            return stateProvinceCode;
+        }
+
+
         public String toString() {
             return street + "\n" + city + ", " + stateProvinceCode.substring(2) + " " + zipCode;
         }
