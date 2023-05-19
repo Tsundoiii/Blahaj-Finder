@@ -21,6 +21,8 @@ public class BlahajFinder implements Runnable {
     private double[] coordinates;
     @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
     private int numberOfStores = 1;
+    @Option(names = {"-v", "--verbose"}, description = "verbose output")
+    private boolean verbose = false;
 
     public static HttpResponse request(String url, String[]... headers) throws IOException {
         HttpRequest request = new NetHttpTransport().createRequestFactory((HttpRequest hr) -> {
@@ -62,7 +64,7 @@ public class BlahajFinder implements Runnable {
 
         for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toList())) {
             Store store = distToStores.get(entry);
-            store.printInfo(availabilities.get(store.getId()));
+            store.printInfo(availabilities.get(store.getId()), verbose);
             System.out.println();
         }
     }
