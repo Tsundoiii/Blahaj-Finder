@@ -1,3 +1,5 @@
+package BlahajFinder;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +35,7 @@ public class BlahajFinder implements Runnable {
      * Make an HTTP request to a URL with the specified headers and parse the
      * response as JSON
      * 
-     * @param url URL to make request to
+     * @param url     URL to make request to
      * @param headers String arrays of header name and value pairs
      * @return HTTP response
      * @throws IOException
@@ -67,7 +69,8 @@ public class BlahajFinder implements Runnable {
             stores.forEach(store -> distanceToStores.put(store.distance(coordinates), store));
             request(
                     "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
-                    new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
+                    new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" }) // API key taken from IKEA website,
+                                                                                            // may change in future
                     .parseAs(Availabilities.class).getData().stream()
                     .filter(availabilityInfo -> availabilityInfo.getAvailableStocks() != null)
                     .forEach(availabilityInfo -> availabilities.put(

@@ -22,9 +22,9 @@ sourceSets {
 
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    
+
     manifest {
-        attributes "Main-Class": "BlahajFinder"
+        attributes "Main-Class": "BlahajFinder.BlahajFinder"
     }
 
     from {

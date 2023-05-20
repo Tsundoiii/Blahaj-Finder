@@ -1,3 +1,5 @@
+package BlahajFinder;
+
 /**
  * Enum to hold ANSI codes of colors so they can be printed in the terminal
  */

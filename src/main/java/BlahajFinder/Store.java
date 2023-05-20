@@ -1,3 +1,5 @@
+package BlahajFinder;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
@@ -193,7 +195,7 @@ public class Store {
                         : ZonedDateTime.now().withZoneSameInstant(ZoneId.of(address.getTimezone()));
 
                 /*
-                 * pls ignore this
+                 * pls ignore this abomination
                  * this was an experiment to see how much I could fit into "one" line
                  * (the answer is too much)
                  */
