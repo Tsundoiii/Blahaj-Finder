@@ -2,9 +2,6 @@ plugins {
     id 'java'
 }
 
-group 'blahaj-finder'
-version '1.0'
-
 repositories {
     mavenCentral()
 }
@@ -20,5 +17,17 @@ sourceSets {
         java {
             srcDirs = ['src/main/java']
         }
+    }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    manifest {
+        attributes "Main-Class": "BlahajFinder"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
