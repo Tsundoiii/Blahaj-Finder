@@ -24,13 +24,13 @@ public class Store {
             return timezone;
         }
 
-        public String getStateProvinceCode() {
-            return stateProvinceCode;
+        public String getState() {
+            return stateProvinceCode.substring(2);
         }
 
 
         public String toString() {
-            return street + "\n" + city + ", " + stateProvinceCode.substring(2) + " " + zipCode;
+            return street + "\n" + city + ", " + getState() + " " + zipCode;
         }
     }
 
@@ -71,15 +71,9 @@ public class Store {
     public static class BuClassification {
         @Key
         private String code;
-        @Key
-        private String name;
 
         public String getCode() {
             return code;
-        }
-
-        public String getName() {
-            return name;
         }
     }
 

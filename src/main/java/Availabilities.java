@@ -5,56 +5,20 @@ import com.google.api.client.util.Key;
 public class Availabilities {
     public static class AvailabilityInfo {
         public static class AvailableStock {
-            public static class Probability {
-                public static class Communication {
-                    @Key
-                    private String messageType;
-
-                    public String getMessageType() {
-                        return messageType;
-                    }
-                }
-
-                @Key
-                private Communication communication;
-
-                public Communication getCommunication() {
-                    return communication;
-                }
-            }
-
             @Key
             private int quantity;
-            @Key
-            private String updateDateTime;
-            @Key
-            private List<Probability> probabilities;
 
             public int getQuantity() {
                 return quantity;
-            }
-
-            public String getUpdateDateTime() {
-                return updateDateTime;
-            }
-
-            public List<Probability> getProbabilities() {
-                return probabilities;
             }
         }
 
         public static class ClassUnitKey {
             @Key
             private String classUnitCode;
-            @Key
-            private String classUnitType;
 
             public String getClassUnitCode() {
                 return classUnitCode;
-            }
-
-            public String getClassUnitType() {
-                return classUnitType;
             }
         }
 
@@ -74,14 +38,8 @@ public class Availabilities {
 
     @Key
     private List<AvailabilityInfo> data;
-    @Key
-    private String timestamp;
 
     public List<AvailabilityInfo> getData() {
         return data;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
     }
 }

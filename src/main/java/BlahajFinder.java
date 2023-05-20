@@ -43,7 +43,7 @@ public class BlahajFinder implements Runnable {
     @Override
     public void run() {
         HashMap<String, Integer> availabilities = new HashMap<String, Integer>();
-        SortedMap<Double, Store> distToStores = new TreeMap<Double, Store>();
+        SortedMap<Double, Store> distanceToStores = new TreeMap<Double, Store>();
 
         try {
             @SuppressWarnings("unchecked") // this is a communist state, no dissent is allowed
@@ -52,10 +52,10 @@ public class BlahajFinder implements Runnable {
                     .parseAs(new TypeToken<List<Store>>() {
                     }.getType())).stream()
                     .filter(store -> store.getBuClassification().getCode().equals("STORE") && (states != null
-                            ? states.contains(store.getAddress().getStateProvinceCode().substring(2))
+                            ? states.contains(store.getAddress().getState())
                             : true))
                     .collect(Collectors.toList());
-            stores.forEach(store -> distToStores.put(store.distance(coordinates), store));
+            stores.forEach(store -> distanceToStores.put(store.distance(coordinates), store));
             request(
                     "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
                     new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" })
@@ -68,8 +68,8 @@ public class BlahajFinder implements Runnable {
             ioe.printStackTrace();
         }
 
-        for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toList())) {
-            Store store = distToStores.get(entry);
+        for (double entry : distanceToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toList())) {
+            Store store = distanceToStores.get(entry);
             store.printInfo(availabilities.get(store.getId()), address, storeHours);
         }
     }
