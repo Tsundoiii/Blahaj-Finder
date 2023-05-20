@@ -1,4 +1,3 @@
-import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
@@ -7,6 +6,10 @@ import java.util.Locale;
 
 import com.google.api.client.util.Key;
 
+/**
+ * Class to repsent JSON response containing information about each IKEA store,
+ * Only necessary fields from the response are parsed.
+ */
 public class Store {
     public static class Address {
         @Key
@@ -27,7 +30,6 @@ public class Store {
         public String getState() {
             return stateProvinceCode.substring(2);
         }
-
 
         public String toString() {
             return street + "\n" + city + ", " + getState() + " " + zipCode;
@@ -130,6 +132,13 @@ public class Store {
         return new double[] { Double.parseDouble(lat), Double.parseDouble(lng) };
     }
 
+    /**
+     * Calculate the distance from specified coordinates to this IKEA store using
+     * the haversine formula
+     * 
+     * @param coordinates Array of coordinates in decimal degrees
+     * @return Distance away from coordinates in kilometers
+     */
     public double distance(double[] coordinates) {
         final double[] storeCoordinates = getCoordinates();
         final int R = 6371;
@@ -145,16 +154,25 @@ public class Store {
         return R * c;
     }
 
-    public void printInfo(int quantity, boolean showAddress, boolean showStoreHours) {
+    /**
+     * Print specified information about this IKEA store
+     * 
+     * @param quantity        Quantity of shonks available at this IKEA store
+     * @param printAddress    Print address of store if true; determined by
+     *                        {@code -a} flag
+     * @param printStoreHours Print opening hours of store if true; determined by
+     *                        {@code -o} flag
+     */
+    public void printInfo(int quantity, boolean printAddress, boolean printStoreHours) {
         System.out.println((quantity > 0 ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + quantity
                 + Color.RESET.getColorCode() + " blåhaj(s) are available at " + getName());
         System.out.println();
-        if (showAddress) {
+        if (printAddress) {
             System.out.println("Address:");
             System.out.println(address);
             System.out.println();
         }
-        if (showStoreHours) {
+        if (printStoreHours) {
             System.out.println("Store hours:");
             hours.normal.forEach(operatingHours -> {
                 /*
@@ -173,18 +191,27 @@ public class Store {
                 ZonedDateTime now = id.equals("537")
                         ? ZonedDateTime.now().withZoneSameInstant(ZoneId.of("America/New_York"))
                         : ZonedDateTime.now().withZoneSameInstant(ZoneId.of(address.getTimezone()));
-                int currentHour = now.getHour();
-                DayOfWeek currentDay = now.getDayOfWeek();
-                boolean open = Integer
-                        .parseInt(hours.getNormal().get(currentDay.getValue() - 1).getOpen().substring(0,
-                                2)) <= currentHour
-                        && currentHour < Integer
-                                .parseInt(hours.getNormal().get(currentDay.getValue() - 1).getClose().substring(0, 2));
 
+                /*
+                 * pls ignore this
+                 * this was an experiment to see how much I could fit into "one" line
+                 * (the answer is too much)
+                 */
                 System.out.println(
-                        (currentDay.getDisplayName(TextStyle.SHORT, Locale.getDefault()).equalsIgnoreCase(
+                        (now.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault()).equalsIgnoreCase(
                                 operatingHours.getDay())
-                                        ? (open ? Color.GREEN.getColorCode() : Color.RED.getColorCode()) + "* "
+                                        ? ((Integer
+                                                .parseInt(hours.getNormal().get(now.getDayOfWeek().getValue() - 1)
+                                                        .getOpen()
+                                                        .substring(0,
+                                                                2)) <= now.getHour()
+                                                && now.getHour() < Integer
+                                                        .parseInt(
+                                                                hours.getNormal().get(now.getDayOfWeek().getValue() - 1)
+                                                                        .getClose().substring(0, 2)))
+                                                                                ? Color.GREEN.getColorCode()
+                                                                                : Color.RED.getColorCode())
+                                                + "* "
                                                 + Color.RESET.getColorCode()
                                         : "  ")
                                 + operatingHours);

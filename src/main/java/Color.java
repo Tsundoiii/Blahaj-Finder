@@ -1,3 +1,6 @@
+/**
+ * Enum to hold ANSI codes of colors so they can be printed in the terminal
+ */
 public enum Color {
     RESET("\u001B[0m"),
     CYAN("\u001B[36m"),

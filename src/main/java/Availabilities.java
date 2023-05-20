@@ -2,6 +2,11 @@ import java.util.List;
 
 import com.google.api.client.util.Key;
 
+/**
+ * Class to represent JSON response containing information about stocks of
+ * shonks at each IKEA store.
+ * Only necessary fields from the response are parsed.
+ */
 public class Availabilities {
     public static class AvailabilityInfo {
         public static class AvailableStock {

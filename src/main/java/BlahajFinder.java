@@ -26,9 +26,18 @@ public class BlahajFinder implements Runnable {
     private int numberOfStores = 1;
     @Option(names = { "-a", "--address" }, description = "show address")
     private boolean address = false;
-    @Option(names = { "-h", "--hours" }, description = "show store hours")
+    @Option(names = { "-o", "--opening-hours" }, description = "show opening hours")
     private boolean storeHours = false;
 
+    /**
+     * Make an HTTP request to a URL with the specified headers and parse the
+     * response as JSON
+     * 
+     * @param url URL to make request to
+     * @param headers String arrays of header name and value pairs
+     * @return HTTP response
+     * @throws IOException
+     */
     public static HttpResponse request(String url, String[]... headers) throws IOException {
         HttpRequest request = new NetHttpTransport()
                 .createRequestFactory(hr -> hr.setParser(new JsonObjectParser(new GsonFactory())))
