@@ -53,7 +53,16 @@ public class BlahajFinder implements Runnable {
 
     @Override
     public void run() {
+        /*
+         * Map of IKEA store codes to availability of blahajs at that store
+         */
         HashMap<String, Integer> availabilities = new HashMap<String, Integer>();
+        /*
+         * Map of distances between provided coordinates and each IKEA store.
+         * 
+         * Since this a sorted map, stores become ordered based on how close they are to
+         * provided coordinates no matter what ordered they are added to the map in.
+         */
         SortedMap<Double, Store> distanceToStores = new TreeMap<Double, Store>();
 
         try {
@@ -69,7 +78,8 @@ public class BlahajFinder implements Runnable {
             stores.forEach(store -> distanceToStores.put(store.distance(coordinates), store));
             request(
                     "https://api.ingka.ikea.com/cia/availabilities/ru/us?itemNos=90373590&expand=StoresList,Restocks,SalesLocations,",
-                    new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" }) // API key taken from IKEA website,
+                    new String[] { "x-client-id", "da465052-7912-43b2-82fa-9dc39cdccef8" }) // API key taken from IKEA
+                                                                                            // website,
                                                                                             // may change in future
                     .parseAs(Availabilities.class).getData().stream()
                     .filter(availabilityInfo -> availabilityInfo.getAvailableStocks() != null)
