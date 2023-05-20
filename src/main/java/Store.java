@@ -195,6 +195,7 @@ public class Store {
                                         : "  ")
                                 + operatingHours);
             });
+            System.out.println();
         }
     }
 }

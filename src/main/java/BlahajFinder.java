@@ -52,8 +52,7 @@ public class BlahajFinder implements Runnable {
                     .parseAs(new TypeToken<List<Store>>() {
                     }.getType())).stream()
                     .filter(store -> store.getBuClassification().getCode().equals("STORE") && (states != null
-                            ? states.stream()
-                                    .anyMatch(state -> ("US" + state).equals(store.getAddress().getStateProvinceCode()))
+                            ? states.contains(store.getAddress().getStateProvinceCode().substring(2))
                             : true))
                     .collect(Collectors.toList());
             stores.forEach(store -> distToStores.put(store.distance(coordinates), store));
@@ -69,12 +68,9 @@ public class BlahajFinder implements Runnable {
             ioe.printStackTrace();
         }
 
-        System.out.println(Color.CYAN.getColorCode() + "BLÅHAJ FINDER" + Color.RESET.getColorCode());
-        System.out.println();
         for (double entry : distToStores.keySet().stream().limit(numberOfStores).collect(Collectors.toList())) {
             Store store = distToStores.get(entry);
             store.printInfo(availabilities.get(store.getId()), address, storeHours);
-            System.out.println();
         }
     }
 
