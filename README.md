@@ -71,7 +71,7 @@ However, let's say you're going down to Florida (I'm not sure why you or anyone 
 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/3c6956c5-c750-4f75-bd87-10391f780db6)
 
-You can search multiple states by separating them with commas (so you're not stuck with just going to Florida (ugh)).
+You can search multiple states by separating them with commas (so you're not stuck with just going to Florida (ugh)). In this case, it would search for the closest store which is located in either Florida or North Carolina.
 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/046f6287-7d64-4d8c-8ebb-d364b6a084d4)
 
