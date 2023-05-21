@@ -57,6 +57,8 @@ These options determine what information the program will display.
 See the [Examples](#Examples) for detailed examples of usage.
 ## Examples
 ### No Options
-Running the program with no options gives the same output (availability of shonks at the closest IKEA store to the default coordinates of (0, 0))
+Running the program with no options gives this output (availability of shonks at the closest IKEA store to the default coordinates of (0, 0))
+![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/19351e50-b626-4e84-b8e0-653b55e47f44)
+
 ### Location Options
 ### Display Options
