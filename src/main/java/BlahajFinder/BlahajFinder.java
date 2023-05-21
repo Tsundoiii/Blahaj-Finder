@@ -42,7 +42,7 @@ public class BlahajFinder implements Runnable {
      */
     public static HttpResponse request(String url, String[]... headers) throws IOException {
         HttpRequest request = new NetHttpTransport()
-                .createRequestFactory(hr -> hr.setParser(new JsonObjectParser(new GsonFactory())))
+                .createRequestFactory(httpRequest -> httpRequest.setParser(new JsonObjectParser(new GsonFactory())))
                 .buildGetRequest(new GenericUrl(url));
         for (String[] header : headers) {
             request.getHeaders().set(header[0], header[1]);
