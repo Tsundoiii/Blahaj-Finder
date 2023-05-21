@@ -59,10 +59,13 @@ See the [Examples](#Examples) for detailed examples of usage.
 ### No Options
 Running the program with no options gives this output (availability of shonks at the closest IKEA store to the default coordinates of 0°N 0°E)
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/19351e50-b626-4e84-b8e0-653b55e47f44)
+
 If you don't live at 0°N, 0°E (which you probably don't considering it's in the middle of the ocean), you will probably want to pass some location options.
 ### Location Options
 Let's say you're at the Georgia Aquarium and you want to know how many frens you can get the sharks there :>. The Georgia Aquarium is at 33°45'48.1"N 84°23'42.7"W, which in demical degrees is 33.763354, -84.395189. You can get decimal degrees by right-clicking on a place in Google Maps. You can pass the `-c` option to tell the program to search for the nearest IKEA store to those coordinates.
+
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/2e793d16-8b83-4775-af27-8f18afc3307e)
 However, let's say you're going down to Florida (I'm not sure why you or anyone else would want to go there, especially if you're the type of person to like blåhajs, but whatever) and you want to know which IKEA store in Florida is closest to your current location. You can pass the `-s` option with the state's two-letter abbreviation (`FL`) to limit the result to only the closest store in Florida.
+
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/3c6956c5-c750-4f75-bd87-10391f780db6)
 ### Display Options
