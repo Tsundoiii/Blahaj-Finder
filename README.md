@@ -63,7 +63,7 @@ Running the program with no options gives this output (availability of shonks at
 
 If you don't live at 0°N, 0°E (which you probably don't considering it's in the middle of the ocean), you will probably want to pass some location options.
 ### Location Options
-Let's say you're at the Georgia Aquarium and you want to know how many frens you can get the sharks there :>. The Georgia Aquarium is at 33°45'48.1"N 84°23'42.7"W, which in demical degrees is 33.763354, -84.395189. You can get decimal degrees by right-clicking on a place in Google Maps. You can pass the `-c` option to tell the program to search for the nearest IKEA store to those coordinates. (remember to remove the space after the comma in the coordinates!)
+Let's say you're at the Georgia Aquarium and you want to know how many frens you can get the sharks there :>. The Georgia Aquarium is at 33°45'48.1"N 84°23'42.7"W, which in demical degrees is 33.763354, -84.395189. You can get decimal degrees by right-clicking on a place in Google Maps. You can pass the `-c` option to tell the program to search for the nearest IKEA store to those coordinates (remember to remove the space after the comma in the coordinates!)
 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/2e793d16-8b83-4775-af27-8f18afc3307e)
 
@@ -72,7 +72,7 @@ However, let's say you're going down to Florida (I'm not sure why you or anyone 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/3c6956c5-c750-4f75-bd87-10391f780db6)
 
 ### Display Options
-To display the 3 closest rather than just the closest, you can pass the `-n` option to tell the program the (maximum) number of store to display
+To display the 3 closest rather than just the closest, you can pass the `-n` option to tell the program the (maximum) number of stores to display
 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/033dec26-2ce5-4d03-90a0-ed539f3bae88)
 

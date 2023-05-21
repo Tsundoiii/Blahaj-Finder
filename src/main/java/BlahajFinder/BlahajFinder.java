@@ -20,15 +20,15 @@ import picocli.CommandLine;
 import picocli.CommandLine.Option;
 
 public class BlahajFinder implements Runnable {
-    @Option(names = { "-c", "--coordinates" }, description = "coordinates", split = ",")
+    @Option(names = { "-c", "--coordinates" }, description = "Coordinates to use to determine nearest IKEA store in demical degrees.", split = ",")
     private double[] coordinates = { 0, 0 };
-    @Option(names = { "-s", "--state" }, description = "state to search in", split = ",")
+    @Option(names = { "-s", "--state" }, description = "Two-letter abbreviation of state(s) to search for stores in.", split = ",")
     private ArrayList<String> states;
-    @Option(names = { "-n", "--number-of-stores" }, description = "number of stores to list")
+    @Option(names = { "-n", "--number-of-stores" }, description = "Number of stores to display.")
     private int numberOfStores = 1;
-    @Option(names = { "-a", "--address" }, description = "show address")
+    @Option(names = { "-a", "--address" }, description = "Display address of store(s).")
     private boolean address = false;
-    @Option(names = { "-o", "--opening-hours" }, description = "show opening hours")
+    @Option(names = { "-o", "--opening-hours" }, description = "Display opening hours of store(s) and whether the store is current open or not.")
     private boolean storeHours = false;
 
     /**
