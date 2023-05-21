@@ -10,7 +10,7 @@ You can either run the program in the browser or install the program to your loc
 Fork [this repository](https://app.codingrooms.com/w/bYrxX4yc2GWI) to run it in the browser.
 ### Local
 #### Download
-Download the `blahaj-finder.jar` file from the latest (and probably only) release from the releases tab.
+Download the `blahaj-finder.jar` file from the latest (and probably only) release from the [releases](https://github.com/Tsundoiii/blahaj-finder/releases/tag/latest) tab.
 #### Building
 First, clone the repository.
 ```
