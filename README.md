@@ -90,4 +90,4 @@ And to display the opening hours of each store, you can pass the `-o` option
 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/03b756b4-b25f-4a2f-8114-0bf79d516181)
 
-A star by the current day's date will indicate whether a store is currently open (green) or closed (red).
+A star by the current day of the week will indicate whether a store is currently open (green) or closed (red).
