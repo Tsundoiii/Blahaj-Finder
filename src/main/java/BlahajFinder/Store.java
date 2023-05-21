@@ -11,6 +11,7 @@ import com.google.api.client.util.Key;
 /**
  * Class to repsent JSON response containing information about each IKEA store,
  * Only necessary fields from the response are parsed.
+ * Helper methods are also present.
  */
 public class Store {
     public static class Address {
