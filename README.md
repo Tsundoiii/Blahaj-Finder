@@ -40,7 +40,7 @@ Run the program using Java.
 java -jar <path to JAR file> <options>
 ```
 ### Options
-Options are passed as command line arguments. Although it is technically possible to run the program without options, you will probably want to pass options to the program.
+Options are passed as command line arguments and can be passed in any order. Although it is technically possible to run the program without options, you will probably want to pass options to the program.
 
 There are two types of options: location and display.
 #### Location
@@ -63,7 +63,7 @@ Running the program with no options gives this output (availability of shonks at
 
 If you don't live at 0°N, 0°E (which you probably don't considering it's in the middle of the ocean), you will probably want to pass some location options.
 ### Location Options
-Let's say you're at the Georgia Aquarium and you want to know how many frens you can get the sharks there :>. The Georgia Aquarium is at 33°45'48.1"N 84°23'42.7"W, which in demical degrees is 33.763354, -84.395189. You can get decimal degrees by right-clicking on a place in Google Maps. You can pass the `-c` option to tell the program to search for the nearest IKEA store to those coordinates.
+Let's say you're at the Georgia Aquarium and you want to know how many frens you can get the sharks there :>. The Georgia Aquarium is at 33°45'48.1"N 84°23'42.7"W, which in demical degrees is 33.763354, -84.395189. You can get decimal degrees by right-clicking on a place in Google Maps. You can pass the `-c` option to tell the program to search for the nearest IKEA store to those coordinates. (remember to remove the space after the comma in the coordinates!)
 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/2e793d16-8b83-4775-af27-8f18afc3307e)
 
@@ -72,3 +72,16 @@ However, let's say you're going down to Florida (I'm not sure why you or anyone 
 ![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/3c6956c5-c750-4f75-bd87-10391f780db6)
 
 ### Display Options
+To display the 3 closest rather than just the closest, you can pass the `-n` option to tell the program the (maximum) number of store to display
+
+![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/033dec26-2ce5-4d03-90a0-ed539f3bae88)
+
+And to display the addresses of each store, you can pass the `-a` option
+
+![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/e6ae05f8-2a21-4c53-b2fa-a80533ec7092)
+
+And to display the opening hours of each store, you can pass the `-o` option
+
+![image](https://github.com/Tsundoiii/blahaj-finder/assets/91398247/03b756b4-b25f-4a2f-8114-0bf79d516181)
+
+A star by the current day's date will indicate whether a store is currently open (green) or closed (red).
